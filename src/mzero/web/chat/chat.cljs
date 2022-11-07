@@ -39,8 +39,8 @@
   (swap! chat-data post-my-message)
   (let [messages-div (.getElementById js/document "mzc-messages")
         messages-height (.-offsetHeight messages-div)]
-    ;; wait for the component to render again then scroll down
-    (.setTimeout js/window #(set! (.-scrollTop messages-div) messages-height) 100)))
+    ;; wait a few ms for the component to render again then scroll down
+    (.setTimeout js/window #(set! (.-scrollTop messages-div) messages-height) 25)))
 
 (defn chat-component []
   [:div
