@@ -3,7 +3,7 @@
              [reagent.dom :refer [render]]
              [goog.dom :as gdom]))
 
-(defn- run-game []
+(defn- run-chat []
   (render [chat/chat-component] (gdom/getElement "app")))
 
-(run-game)
+(run-chat)
