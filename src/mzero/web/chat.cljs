@@ -8,7 +8,7 @@
 (defn add-message [chat-data user text]
   (update chat-data :messages conj {:user user :text text}))
 
-(defn ^:export get-chat-data [] @chat-data)
+(defn ^:export get-messages [] (clj->js (:messages @chat-data)))
 
 (defn ^:export send-message [user text]
   (when (not (some #(= user %) ["you" "me"]))
