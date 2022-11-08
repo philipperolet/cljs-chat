@@ -20,11 +20,11 @@
     (.setTimeout js/window #(set! (.-scrollTop messages-div) messages-height) 25)))
 
 (defn send-my-message! []
-  (send-message "me" (:current-message chat-data))
+  (send-message "me" (:current-message @chat-data))
   (swap! chat-data assoc :current-message ""))
 
 (defn message-row [index message]
-  [:div {:class (name (:user message))
+  [:div {:class (:user message)
          :key (str "msg" index)}
    [:div (:text message)]])
 
