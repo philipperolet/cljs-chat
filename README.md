@@ -4,7 +4,7 @@ A simple Javascript chat component. The in Clojurescript
 
 It looks like this:
 
-![Image of the chat component](chat-image.png)
+![Image of the chat component](resources/screenshot.png)
 
 ## Requirements
 - Bootstrap v4
@@ -34,10 +34,15 @@ curl https://github.com/philipperolet/cljs-chat/blob/main/resources/public/css/c
 <div id="cljs-chat" class="container-fluid"></div>
 ```
 ### Messages
-Post messages to users "you" and "me" like this:
-```
-```
+You can: 
+- programatically post messages to users "you" and "me";
+- access the full message history;
 
+```
+mzero.web.chat.send_message("you", "Hello!");
+mzero.web.chat.send_message("me", "Hi, what's up?");
+```
+You can access all messages like this:
 There is a callback
 
 ### Sytle customization
