@@ -5,22 +5,22 @@
 
 (def chat-data (r/atom {:messages messages}))
 
-(defn send-message [chat-data user text]
+(defn add-message [chat-data user text]
   (update chat-data :messages conj {:user user :text text}))
 
 (defn ^:export get-chat-data [] @chat-data)
 
-(defn ^:export send-message! [user text]
+(defn ^:export send-message [user text]
   (when (not (some #(= user %) ["you" "me"]))
     (throw (js/Error. "User should be 'me' or 'you'")))
-  (swap! chat-data send-message user text)
+  (swap! chat-data add-message user text)
   (let [messages-div (.getElementById js/document "mzc-messages")
         messages-height (.-offsetHeight messages-div)]
     ;; wait a few ms for the component to render again then scroll down
     (.setTimeout js/window #(set! (.-scrollTop messages-div) messages-height) 25)))
 
 (defn send-my-message! []
-  (send-message! "me" (:current-message chat-data))
+  (send-message "me" (:current-message chat-data))
   (swap! chat-data assoc :current-message ""))
 
 (defn message-row [index message]
