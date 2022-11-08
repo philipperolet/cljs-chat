@@ -1,0 +1,1 @@
+- compile JS with small footprint
