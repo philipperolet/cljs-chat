@@ -11,6 +11,8 @@
 (defn ^:export get-chat-data [] @chat-data)
 
 (defn ^:export send-message! [user text]
+  (when (not (some #(= user %) ["you" "me"]))
+    (throw (js/Error. "User should be 'me' or 'you'")))
   (swap! chat-data send-message user text)
   (let [messages-div (.getElementById js/document "mzc-messages")
         messages-height (.-offsetHeight messages-div)]
