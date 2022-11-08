@@ -11,6 +11,7 @@
 .mzero-chat .messages {
     overflow: auto;
     height: 20em;
+    padding-top: 0.2em;
     border-bottom: thin black solid;
     padding-right: 0.5em;
 }
