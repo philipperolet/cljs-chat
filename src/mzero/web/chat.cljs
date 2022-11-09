@@ -3,7 +3,7 @@
             [cljs.spec.alpha :as s]))
 
 (def ^:export placeholder-message "Talk here")
-(def ^:export send-callback (fn [] nil))
+(def ^:export send-button-callback (constantly nil))
 
 (s/def ::user #{"me" "you"})
 (s/def ::text string?)
@@ -32,20 +32,27 @@
     (validate! ::messages messages)
     (swap! chat-data assoc :messages messages)))
 
-(defn ^:export send-message [user text]
-  ;; add message to history
-  (let [message {:user user :text text}]
-    (validate! ::message message)
-    (swap! chat-data update :messages conj message))
-  
-  ;; scroll chat window
-  (let [messages-div (.getElementById js/document "mzc-messages")
-        messages-height (.-offsetHeight messages-div)]
-    ;; wait a few ms for the component to render again then scroll down
-    (.setTimeout js/window #(set! (.-scrollTop messages-div) messages-height) 25)))
+(defn ^:export send-message
+  ([user text callback]
+   ;; add message to history
+   (let [message {:user user :text text}]
+     (validate! ::message message)
+     (swap! chat-data update :messages conj message)
+     
+     ;; scroll chat window, then callback
+     (let [messages-div (.getElementById js/document "mzc-messages")
+           messages-height (.-offsetHeight messages-div)
+           scroll-and-callback
+           (fn []
+             (set! (.-scrollTop messages-div) messages-height)
+             (callback message))]
+       ;; wait a few ms for the component to render again then scroll & callback
+       (.setTimeout js/window scroll-and-callback 25))))
+  ([user text]
+   (send-message user text (constantly nil))))
 
 (defn send-my-message! []
-  (send-message "me" (:current-message @chat-data))
+  (send-message "me" (:current-message @chat-data) send-button-callback)
   (swap! chat-data assoc :current-message ""))
 
 (defn message-row [index message]
