@@ -95,3 +95,7 @@ The main CSS elements are
 - ".new-message" the div with the input and send button.
 
 ## About
+
+This project is licensed under the terms of the [Eclipse License](LICENSE)
+
+Copyright (c) 2022 Philippe Rolet
