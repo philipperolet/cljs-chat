@@ -1,19 +1,44 @@
 (ns mzero.web.chat
-  (:require [reagent.core :as r]))
+  (:require [reagent.core :as r]
+            [cljs.spec.alpha :as s]))
+
+(def ^:export placeholder-message "Talk here")
+(def ^:export send-callback (fn [] nil))
+
+(s/def ::user #{"me" "you"})
+(s/def ::text string?)
+
+(s/def ::message (s/keys :req-un [::user ::text]))
+(s/def ::messages (s/every ::message))
 
 (def messages [])
 
 (def chat-data (r/atom {:messages messages}))
 
-(defn add-message [chat-data user text]
-  (update chat-data :messages conj {:user user :text text}))
+(defn- validate!
+  ([spec obj message]
+   (when (not (s/valid? spec obj))
+     (throw (js/Error. message))))
+  ([spec obj]
+   (validate! spec obj (str "Object has invalid specs: " (s/explain-str spec obj)))))
 
 (defn ^:export get-messages [] (clj->js (:messages @chat-data)))
 
+(defn ^:export set-messages [raw-messages]
+  (let [messages
+        (if (array? raw-messages) ;; if messages is a JS array
+          (js->clj raw-messages :keywordize-keys true)
+          raw-messages)]
+    (validate! ::messages messages)
+    (swap! chat-data assoc :messages messages)))
+
 (defn ^:export send-message [user text]
-  (when (not (some #(= user %) ["you" "me"]))
-    (throw (js/Error. "User should be 'me' or 'you'")))
-  (swap! chat-data add-message user text)
+  ;; add message to history
+  (let [message {:user user :text text}]
+    (validate! ::message message)
+    (swap! chat-data update :messages conj message))
+  
+  ;; scroll chat window
   (let [messages-div (.getElementById js/document "mzc-messages")
         messages-height (.-offsetHeight messages-div)]
     ;; wait a few ms for the component to render again then scroll down
@@ -37,7 +62,7 @@
      [:div.new-message
       [:input.message-input
        {:type "text"
-        :placeholder "Talk to the AI"
+        :placeholder placeholder-message
         :value (:current-message @chat-data)
         :auto-focus true
         :on-key-up #(when (= "Enter" (.-key %)) (send-my-message!))
