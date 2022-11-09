@@ -82,9 +82,14 @@ The component is written in ClojureScript, so no need to use JS interop and type
 (:require [mzero.web.chat :as c])
 ...
 (c/send-message "you" "Hello")
+(c/send-message "me" "Hi, what'sup" callback-fn)
+(:messages @c/chat-data) ;; equivalent of get_messages
+(set! c/send-button-callback #(js/alert "Hey"))
+(set! c/placeholder_message "Talk to the AI")
 (c/set-messages [{:user "me" :text "yo"} {:user "you" :text "lo"}])
 ...
 ```
+Note that rather using "get-messages" that returns JS objects, we look directly at the chat data atom.
 
 ## Style customization
 The [CSS file](resources/public/css/cljs-chat.css) is very short (< 90 lines) and straightforward. It can easily be changed as you see fit.
