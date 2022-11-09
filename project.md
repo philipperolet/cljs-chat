@@ -1,1 +1,1 @@
-- compile JS with small footprint
+The project is a small CLJS chat component
