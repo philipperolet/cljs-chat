@@ -6,7 +6,7 @@
 (def ^:export send-button-callback (constantly nil))
 
 (s/def ::user #{"me" "you"})
-(s/def ::text string?)
+(s/def ::text (s/and string? #(seq %)))
 
 (s/def ::message (s/keys :req-un [::user ::text]))
 (s/def ::messages (s/every ::message))
