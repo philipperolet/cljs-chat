@@ -27,6 +27,10 @@
     text-align: right;
 }
 
+.mzero-chat div.you {
+    text-align: left;
+}
+
 .mzero-chat .messages div.you > div,
 .mzero-chat .messages div.me > div {
     border-radius: 10px;
@@ -47,6 +51,7 @@
     bottom: 0%;
     padding-bottom: 0.5em;
     width: 100%;
+    text-align: left;
 }
 
 .new-message input {
