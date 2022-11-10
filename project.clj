@@ -1,4 +1,4 @@
-(defproject org.clojars.philipperolet/cljs-chat "0.3"
+(defproject org.clojars.philipperolet/cljs-chat "0.4.0"
   :description "A simple chat component"
   :url "https://github.com/philipperolet/cljs-chat"
   :license {:name "Eclipse Public License"
