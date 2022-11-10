@@ -41,10 +41,9 @@
      
      ;; scroll chat window, then callback
      (let [messages-div (.getElementById js/document "mzc-messages")
-           messages-height (.-offsetHeight messages-div)
            scroll-and-callback
            (fn []
-             (set! (.-scrollTop messages-div) messages-height)
+             (set! (.-scrollTop messages-div) 1e8)
              (callback message))]
        ;; wait a few ms for the component to render again then scroll & callback
        (.setTimeout js/window scroll-and-callback 25))))
